@@ -8,16 +8,12 @@ namespace DoublyLinked
         {
             var llist = new LinkedList<object>();
             llist.Add('o');
-            llist.Add('n');
-            llist.Add('u');
-            llist.Add('r');
+            llist.AddAfter('n', 'o');
+            llist.AddAfter('u', 'n');
+            llist.AddAfter('r', 'u');
+            llist.AddAfter('1', 'n');
 
-            Console.WriteLine("---traverse---");
             llist.Traverse();
-
-            Console.WriteLine("---reverse traverse---");
-            llist.ReverseTraverse();
-
 
             Console.ReadLine();
         }
@@ -83,6 +79,67 @@ namespace DoublyLinked
 
                 tmp = tmp.Next;
             }
+        }
+
+        public void AddBefore(T data, T beforeData)
+        {
+            Node<T> node = Find(beforeData);
+            Node<T> newNode = new Node<T>(data);
+
+            if (node != null)
+            {
+                if (node.Previous != null)
+                {
+                    node.Previous.Next = newNode;
+                    newNode.Next = node;
+                }
+                else
+                {
+                    newNode.Next = node;
+                    node.Previous = newNode;
+                    this.Head = newNode;
+                }
+            }
+        }
+
+        public void AddAfter(T data, T afterData)
+        {
+            Node<T> node = Find(afterData);
+            Node<T> newNode = new Node<T>(data);
+
+            if (node != null)
+            {
+                if (node.Next == null)
+                {
+                    node.Next = newNode;
+                    newNode.Previous = node;
+                }
+                else
+                {
+                    newNode.Next = node.Next;
+                    node.Next= newNode;
+                    newNode.Previous = node;
+                }
+            }
+        }
+
+        public Node<T> Find(T data)
+        {
+            Node<T> node = null;
+            Node<T> tmp = this.Head;
+
+            while (tmp != null)
+            {
+                if (tmp.Data.Equals(data))
+                {
+                    node = tmp;
+                    break;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            return node;
         }
 
         public void Traverse()
